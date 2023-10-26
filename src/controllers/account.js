@@ -7,9 +7,10 @@ const bcrypt = require("bcrypt");
 router.get("/my-data", async (req, res) => {
   try {
     const userToken = req.headers.authorization;
-
+    console.log(userToken)
+    
     const decodedToken = await decodeToken(userToken);
-    const user = await userSchema.findOne({_id: decodedToken.data.id});
+    const user = await userSchema.findOne({ _id: decodedToken.data.id });
 
     if(!user) return res.status(404).send({ logged: false, message: message.user.notfound });
 

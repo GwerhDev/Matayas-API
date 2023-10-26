@@ -16,4 +16,9 @@ module.exports = {
 
   authClientId: process.env.AUTH_CLIENT_ID, 
   authClientSecret: process.env.AUTH_CLIENT_SECRET,
+
+  instagramUserId: process.env.INSTAGRAM_USER_ID,
+  instagramClientId: process.env.INSTAGRAM_CLIENT_ID,
+  instagramClientSecret: process.env.INSTAGRAM_CLIENT_SECRET,
+  instagramAccessToken: process.env.INSTAGRAM_ACCESS_TOKEN,
 }
