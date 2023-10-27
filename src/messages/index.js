@@ -2,21 +2,21 @@ module.exports = {
   message: {
     admin:{
       permissionDenied: "Permission denied",
-      createmedia: {
-        success: "Media created successfully",
-        failure: "Failed to creating media",
-        error: "Error creating media",
+      createproduct: {
+        success: "Product created successfully",
+        failure: "Failed to creating product",
+        error: "Error creating product",
         titleAlreadyExists: "Title already exists",
       },
-      updatemedia: {
-        success: "Media updated successfully",
-        failure: "Media not found",
-        error: "Error updating media",
+      updateproduct: {
+        success: "Product updated successfully",
+        failure: "Product not found",
+        error: "Error updating product",
       },
-      deletemedia: {
-        success: "Media deleted successfully",
-        failure: "Media not found",
-        error: "Error deleting media",
+      deleteproduct: {
+        success: "Product deleted successfully",
+        failure: "Product not found",
+        error: "Error deleting product",
       },
       createuser: {
         success: "User created successfully",
@@ -51,10 +51,10 @@ module.exports = {
       existing: "User already exists",
       notfound: "User not found",
     },
-    media: {
+    product: {
       error: "Error",
-      existing: "Media already exists",
-      notfound: "Media not found",
+      existing: "Product already exists",
+      notfound: "Product not found",
     }
   }
 }
