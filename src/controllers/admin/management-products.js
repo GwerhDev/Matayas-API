@@ -10,7 +10,7 @@ router.post('/create', async(req, res) => {
   }
 });
 
-router.patch('/update', async(req, res) => {
+router.patch('/update/:id', async(req, res) => {
   try {
 
   } catch (error) {
@@ -18,7 +18,7 @@ router.patch('/update', async(req, res) => {
   }
 });
 
-router.delete('/delete', async(req, res) => {
+router.delete('/delete/:id', async(req, res) => {
   try {
 
   } catch (error) {
