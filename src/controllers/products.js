@@ -10,4 +10,14 @@ router.get('/', async (req, res) => {
   }
 });
 
+router.get('/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const response = await productSchema.findById(id);
+    return res.status(200).json(response);
+  } catch (error) {
+    return res.status(500).json({ error: error });
+  }
+});
+
 module.exports = router;
