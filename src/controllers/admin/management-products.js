@@ -22,6 +22,11 @@ router.post('/create', async(req, res) => {
 
 router.patch('/update/:id', async(req, res) => {
   try {
+    const userToken = req.headers.authorization;
+    if (!userToken) return res.status(403).json({ message: message.admin.permissionDenied });
+
+    const decodedToken = await decodeToken(userToken);
+    if (decodedToken?.data?.role !== roles.admin) return res.status(403).json({ message: message.admin.permissionDenied });
 
   } catch (error) {
     return res.status(500).json({ error: error });
@@ -30,6 +35,11 @@ router.patch('/update/:id', async(req, res) => {
 
 router.delete('/delete/:id', async(req, res) => {
   try {
+    const userToken = req.headers.authorization;
+    if (!userToken) return res.status(403).json({ message: message.admin.permissionDenied });
+
+    const decodedToken = await decodeToken(userToken);
+    if (decodedToken?.data?.role !== roles.admin) return res.status(403).json({ message: message.admin.permissionDenied });
 
   } catch (error) {
     return res.status(500).json({ error: error });

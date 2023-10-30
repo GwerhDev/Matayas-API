@@ -48,6 +48,7 @@ router.post('/', async (req, res) => {
       id: userCreated.id,
       role: userCreated.role,
     };
+    
     const token = await createToken(tokenData, 3);
 
     return res.status(200).send({ msg: message.signup.success, token });
