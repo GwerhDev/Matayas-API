@@ -55,6 +55,9 @@ module.exports = {
       error: "Error",
       existing: "Product already exists",
       notfound: "Product not found",
+    },
+    search: {
+      error: "Error",
     }
   }
 }

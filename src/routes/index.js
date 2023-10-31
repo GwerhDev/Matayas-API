@@ -1,6 +1,7 @@
 const router = require('express').Router();
 const auth = require('../controllers/auth');
 const admin = require('../controllers/admin');
+const search = require('../controllers/search');
 const account = require('../controllers/account');
 const products = require('../controllers/products');
 const loginInner = require('../controllers/login-inner');
@@ -10,6 +11,7 @@ const signupGoogle = require('../controllers/signup-google');
 
 router.use("/auth", auth);
 router.use("/admin", admin);
+router.use("/search", search);
 router.use("/account", account);
 router.use("/products", products);
 router.use("/login-inner", loginInner);
