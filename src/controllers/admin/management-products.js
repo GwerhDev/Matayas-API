@@ -28,6 +28,12 @@ router.patch('/update/:id', async(req, res) => {
     const decodedToken = await decodeToken(userToken);
     if (decodedToken?.data?.role !== roles.admin) return res.status(403).json({ message: message.admin.permissionDenied });
 
+    const { id } = req.params;
+
+    await productSchema.findByIdAndUpdate(id, req.body);
+
+    return res.status(200).json({ message: message.admin.updateproduct.success, success: true });
+
   } catch (error) {
     return res.status(500).json({ error: error });
   }
@@ -40,6 +46,12 @@ router.delete('/delete/:id', async(req, res) => {
 
     const decodedToken = await decodeToken(userToken);
     if (decodedToken?.data?.role !== roles.admin) return res.status(403).json({ message: message.admin.permissionDenied });
+
+    const { id } = req.params;
+
+    await productSchema.findByIdAndDelete(id);
+
+    return res.status(200).json({ message: message.admin.deleteproduct.success, success: true });
 
   } catch (error) {
     return res.status(500).json({ error: error });
