@@ -24,12 +24,12 @@ router.patch('/update/:id', async(req, res) => {
   try {
     const userToken = req.headers.authorization;
     if (!userToken) return res.status(403).json({ message: message.admin.permissionDenied });
-
+    
     const decodedToken = await decodeToken(userToken);
     if (decodedToken?.data?.role !== roles.admin) return res.status(403).json({ message: message.admin.permissionDenied });
-
+    
     const { id } = req.params;
-
+    
     await productSchema.findByIdAndUpdate(id, req.body);
 
     return res.status(200).json({ message: message.admin.updateproduct.success, success: true });

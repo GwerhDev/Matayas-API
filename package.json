@@ -39,8 +39,7 @@
     "pg": "^8.8.0",
     "pg-hstore": "^2.3.4",
     "request": "^2.88.2",
-    "sequelize": "^6.33.0",
-    "sharp": "^0.32.6"
+    "sequelize": "^6.33.0"
   },
   "devDependencies": {
     "@flydotio/dockerfile": "^0.4.9",
