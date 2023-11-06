@@ -12,8 +12,8 @@ router.post('/create', async(req, res) => {
     const decodedToken = await decodeToken(userToken);
     if (decodedToken?.data?.role !== roles.admin) return res.status(403).json({ message: message.admin.permissionDenied });
 
-    const newProduct = new gallerySchema(req.body);
-    await newProduct.save();
+    const newGallery = new gallerySchema(req.body);
+    await newGallery.save();
     return res.status(201).json({ message: message.admin.createproduct.success, success: true });
   } catch (error) {
     return res.status(500).json({ error: error, success: false });
