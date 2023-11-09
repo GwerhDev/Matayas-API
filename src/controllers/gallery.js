@@ -10,6 +10,15 @@ router.get('/', async (req, res) => {
   }
 });
 
+router.get('/lasts', async (req, res) => {
+  try {
+    const response = await gallerySchema.find().sort({ _id: -1 }).limit(3);
+    return res.status(200).json(response);
+  } catch (error) {
+    return res.status(500).json({ error: error });
+  }
+});
+
 router.get('/:id', async (req, res) => {
   try {
     const { id } = req.params;
