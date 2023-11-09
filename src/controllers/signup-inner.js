@@ -1,11 +1,11 @@
 const express = require("express");
 const router = express.Router();
-const userSchema = require("../models/User");
 const bcrypt = require("bcrypt");
+const userSchema = require("../models/User");
 const { message } = require("../messages");
+const { adminEmailList } = require("../config");
 const { status, roles, methods } = require("../misc/consts-user-model");
 const { createToken } = require("../integrations/jwt");
-const { adminEmailList } = require("../config");
 
 router.post('/', async (req, res) => {
   try {

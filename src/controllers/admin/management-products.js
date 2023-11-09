@@ -3,6 +3,7 @@ const { decodeToken } = require('../../integrations/jwt');
 const { message } = require('../../messages');
 const { roles } = require('../../misc/consts-user-model');
 const productSchema = require('../../models/Product');
+const productGallerySchema = require('../../models/ProductGallery');
 
 router.post('/create', async(req, res) => {
   try {
@@ -11,6 +12,13 @@ router.post('/create', async(req, res) => {
 
     const decodedToken = await decodeToken(userToken);
     if (decodedToken?.data?.role !== roles.admin) return res.status(403).json({ message: message.admin.permissionDenied });
+
+    const { productGallery } = req.body;
+
+    for (let i = 0; i < productGallery.length; i++) {
+      const newProductGallery = new productGallerySchema(productGallery[i]);
+      await newProductGallery.save();
+    }
 
     const newProduct = new productSchema(req.body);
     await newProduct.save();
