@@ -1,5 +1,6 @@
 const router = require('express').Router();
 const productSchema = require('../models/Product');
+const productGallerySchema = require('../models/ProductGallery');
 
 router.get('/', async (req, res) => {
   try {
@@ -13,7 +14,7 @@ router.get('/', async (req, res) => {
 router.get('/:id', async (req, res) => {
   try {
     const { id } = req.params;
-    const response = await productSchema.findById(id);
+    const response = await productSchema.findById(id).populate('productGallery');
     return res.status(200).json(response);
   } catch (error) {
     return res.status(500).json({ error: error });

@@ -5,7 +5,7 @@ const { roles } = require('../../misc/consts-user-model');
 const productSchema = require('../../models/Product');
 const productGallerySchema = require('../../models/ProductGallery');
 
-router.post('/create', async(req, res) => {
+router.post('/create', async (req, res) => {
   try {
     const userToken = req.headers.authorization;
     if (!userToken) return res.status(403).json({ message: message.admin.permissionDenied });
@@ -16,8 +16,9 @@ router.post('/create', async(req, res) => {
     const { productGallery } = req.body;
 
     for (let i = 0; i < productGallery.length; i++) {
-      const newProductGallery = new productGallerySchema(productGallery[i]);
+      const newProductGallery = new productGallerySchema({ file: productGallery[i] });
       await newProductGallery.save();
+      req.body.productGallery[i] = newProductGallery._id;
     }
 
     const newProduct = new productSchema(req.body);
@@ -28,16 +29,26 @@ router.post('/create', async(req, res) => {
   }
 });
 
-router.patch('/update/:id', async(req, res) => {
+router.patch('/update/:id', async (req, res) => {
   try {
     const userToken = req.headers.authorization;
     if (!userToken) return res.status(403).json({ message: message.admin.permissionDenied });
-    
+
     const decodedToken = await decodeToken(userToken);
     if (decodedToken?.data?.role !== roles.admin) return res.status(403).json({ message: message.admin.permissionDenied });
-    
+
     const { id } = req.params;
-    
+    const { productGallery } = req.body;
+
+    for (let i = 0; i < productGallery.length; i++) {
+      if (productGallery[i]._id) await productGallerySchema.findByIdAndUpdate(productGallery[i]._id, { file: productGallery[i].file });
+      else {
+        const newProductGallery = new productGallerySchema({ file: productGallery[i].file });
+        await newProductGallery.save();
+        req.body.productGallery[i] = newProductGallery._id;
+      }
+    };
+
     await productSchema.findByIdAndUpdate(id, req.body);
 
     return res.status(200).json({ message: message.admin.updateproduct.success, success: true });
@@ -47,7 +58,7 @@ router.patch('/update/:id', async(req, res) => {
   }
 });
 
-router.delete('/delete/:id', async(req, res) => {
+router.delete('/delete/:id', async (req, res) => {
   try {
     const userToken = req.headers.authorization;
     if (!userToken) return res.status(403).json({ message: message.admin.permissionDenied });
