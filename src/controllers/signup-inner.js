@@ -6,6 +6,7 @@ const { message } = require("../messages");
 const { adminEmailList } = require("../config");
 const { status, roles, methods } = require("../misc/consts-user-model");
 const { createToken } = require("../integrations/jwt");
+const { sendEmailVerification } = require("../integrations/sendgrid");
 
 router.post('/', async (req, res) => {
   try {
@@ -13,12 +14,13 @@ router.post('/', async (req, res) => {
     
     if(!username || !password || !email) return res.status(400).send({ error: message.signup.error });
     
-    const existingUser = await userSchema.findOne({ where: { email: email } });
+    const existingUser = await userSchema.findOne({ email });
     
     if(existingUser) {
       const tokenData = {
         id: existingUser._id,
         role: existingUser.role,
+        isVerified: existingUser.isVerified
       };
       const token = await createToken(tokenData, 3);
       return res.status(200).send({token});
@@ -45,11 +47,14 @@ router.post('/', async (req, res) => {
     const userCreated = await userSchema.create(userData);
 
     const tokenData = {
-      id: userCreated.id,
+      id: userCreated._id,
       role: userCreated.role,
+      isVerified: userCreated.isVerified
     };
     
     const token = await createToken(tokenData, 3);
+
+    const response = await sendEmailVerification(userData, token);
 
     return res.status(200).send({ msg: message.signup.success, token });
 

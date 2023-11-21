@@ -37,10 +37,11 @@ router.get('/success', async (req, res) => {
       const tokenData = {
         id: existingUser._id,
         role: existingUser.role,
+        inVerified: existingUser.isVerified,
       };
       const token = await createToken(tokenData, 3);
       return res.status(200).redirect(`${clientUrl}/#/auth?token=${token}`);
-    }
+    };
 
     const userData = {
       username: user.username ?? defaultUsername,
@@ -61,7 +62,7 @@ router.get('/success', async (req, res) => {
     await userCreated.save();
 
     const tokenData = {
-      _id: userCreated._id,
+      id: userCreated._id,
       role: userCreated.role,
     };
 
