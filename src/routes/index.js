@@ -9,6 +9,7 @@ const loginInner = require('../controllers/login-inner');
 const signupInner = require('../controllers/signup-inner');
 const loginGoogle = require('../controllers/login-google');
 const signupGoogle = require('../controllers/signup-google');
+const contactMessage = require('../controllers/contact-message');
 const emailVerification = require('../controllers/email-verification');
 
 router.use("/auth", auth);
@@ -21,6 +22,7 @@ router.use("/login-inner", loginInner);
 router.use("/signup-inner", signupInner);
 router.use("/login-google", loginGoogle);
 router.use("/signup-google", signupGoogle);
+router.use("/contact-message", contactMessage);
 router.use("/email-verification", emailVerification);
 
 module.exports = router;

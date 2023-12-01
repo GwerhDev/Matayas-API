@@ -16,6 +16,7 @@ module.exports = {
 
   sendgridApiKey: process.env.SENDGRID_API_KEY,
   sendgridSenderEmail: process.env.SENDGRID_SENDER_EMAIL,
+  sendgridTemplateContactMessage: process.env.SENDGRID_TEMPLATE_CONTACT_MESSAGE,
   sendgridTemplateMailVerification: process.env.SENDGRID_TEMPLATE_MAIL_VERIFICATION,
 
   authClientId: process.env.AUTH_CLIENT_ID, 

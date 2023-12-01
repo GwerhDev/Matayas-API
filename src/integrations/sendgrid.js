@@ -1,5 +1,11 @@
 const sgMail = require("@sendgrid/mail");
-const { sendgridSenderEmail, sendgridTemplateMailVerification, sendgridApiKey, clientUrl } = require("../config");
+const { 
+  clientUrl, 
+  sendgridApiKey, 
+  sendgridSenderEmail, 
+  sendgridTemplateContactMessage, 
+  sendgridTemplateMailVerification, 
+} = require("../config");
 
 const sendEmailVerification = async (userData, token) => {
   sgMail.setApiKey(sendgridApiKey);
@@ -20,6 +26,23 @@ const sendEmailVerification = async (userData, token) => {
   return { msg };
 };
 
+const sendContactMessage = async (contactMessage) => {
+  sgMail.setApiKey(sendgridApiKey);
+
+  const msg = {
+    to: sendgridSenderEmail,
+    from: sendgridSenderEmail,
+    templateId: sendgridTemplateContactMessage,
+    dynamic_template_data: {
+      email: contactMessage.email,
+      subject: contactMessage.subject,
+      message: contactMessage.message,
+    }
+  };
+  sgMail.send(msg);
+};
+
 module.exports = {
   sendEmailVerification,
+  sendContactMessage
 };

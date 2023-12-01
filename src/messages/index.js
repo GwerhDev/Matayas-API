@@ -1,5 +1,10 @@
 module.exports = {
   message: {
+    contactMessage: {
+      success: "Message sent successfully",
+      failure: "Message not sent",
+      error: "Error sending message",
+    },
     admin:{
       permissionDenied: "Permission denied",
       createproduct: {
