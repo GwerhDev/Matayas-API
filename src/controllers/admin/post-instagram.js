@@ -7,8 +7,7 @@ const redirectUri = `${apiUrl}/admin/post-instagram/callback`;
 router.get('/', async (req, res) => {
   res.redirect(
     instagram.getAuthorizationUrl(redirectUri, {
-      scope: ['basic', 'likes'],
-      state: 'your state'
+      state: 'offline'
     }));
 });
 
