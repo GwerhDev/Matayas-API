@@ -1,23 +1,38 @@
 const router = require('express').Router();
-const { apiUrl } = require('../../config');
+const { apiUrl, clientUrl } = require('../../config');
 const { instagram } = require('../../integrations/instagram-auth');
+const passport = require('passport');
 
-const redirectUri = `${apiUrl}/admin/post-instagram/callback`;
+passport.use('instagram', instagram);
 
-router.get('/', async (req, res) => {
-  res.redirect(
-    instagram.getAuthorizationUrl(redirectUri, {
-      state: 'offline'
-    }));
+passport.serializeUser((user, done) => {
+  done(null, user);
 });
 
-router.get('/callback', async (req, res) => {
-  const { code } = req.query;
+passport.deserializeUser((user, done) => {
+  done(null, user);
+});
+
+router.get('/', passport.authenticate('instagram'));
+
+router.get('/callback', passport.authenticate('instagram', {
+  successRedirect: '/admin/post-instagram/success',
+  failureRedirect: '/admin/post-instagram/failure'
+}));
+
+router.get('/failure', (req, res) => {
+  return res.status(400).redirect(`${clientUrl}/#/instagram-error`);
+});
+
+router.get('/success', async (req, res) => {
   try {
-    const data = await instagram.authorizeUser(code, redirectUri);
-    console.log(data)
+    const user = req.session.passport.user;
+
+    console.log(user)
+
   } catch (error) {
     console.error(error);
+    return res.status(500).redirect(`${clientUrl}/#/instagram-error`);
   }
 });
 
