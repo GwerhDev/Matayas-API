@@ -9,11 +9,7 @@ const instagram = new Instagram({
 }, function (accessToken, refreshToken, profile, done) {
   process.nextTick(async function () {
     try {
-      const user = {
-        battlenetId: profile.id,
-        battletag: profile.battletag,
-        provider: profile.provider,
-      };
+      console.log(profile)
       return done(null, user);
     } catch (error) {
       return done(error);
