@@ -21,7 +21,7 @@ router.get('/callback', passport.authenticate('instagram', {
 }));
 
 router.get('/failure', (req, res) => {
-  return res.status(400).redirect(`${clientUrl}/#/instagram-error`);
+  return res.status(400).redirect(`${clientUrl}/instagram-error`);
 });
 
 router.get('/success', async (req, res) => {
@@ -32,7 +32,7 @@ router.get('/success', async (req, res) => {
 
   } catch (error) {
     console.error(error);
-    return res.status(500).redirect(`${clientUrl}/#/instagram-error`);
+    return res.status(500).redirect(`${clientUrl}/instagram-error`);
   }
 });
 

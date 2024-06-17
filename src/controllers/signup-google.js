@@ -25,7 +25,7 @@ router.get('/callback', passport.authenticate('signup-google', {
 }));
 
 router.get('/failure', (req, res) => {
-  return res.status(400).redirect(`${clientUrl}/#/register/failed`);
+  return res.status(400).redirect(`${clientUrl}/register/failed`);
 });
 
 router.get('/success', async (req, res) => {
@@ -40,7 +40,7 @@ router.get('/success', async (req, res) => {
         inVerified: existingUser.isVerified,
       };
       const token = await createToken(tokenData, 3);
-      return res.status(200).redirect(`${clientUrl}/#/auth?token=${token}`);
+      return res.status(200).redirect(`${clientUrl}/auth?token=${token}`);
     };
 
     const userData = {
@@ -68,7 +68,7 @@ router.get('/success', async (req, res) => {
 
     const token = await createToken(tokenData, 3);
 
-    return res.status(200).redirect(`${clientUrl}/#/auth?token=${token}`);
+    return res.status(200).redirect(`${clientUrl}/auth?token=${token}`);
 
   } catch (error) {
     return res.send(error);

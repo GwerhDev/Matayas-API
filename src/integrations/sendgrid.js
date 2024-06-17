@@ -10,7 +10,7 @@ const {
 const sendEmailVerification = async (userData, token) => {
   sgMail.setApiKey(sendgridApiKey);
 
-  const link = `${clientUrl}/#/mail-verification/auth?token=${token}`;
+  const link = `${clientUrl}/mail-verification/auth?token=${token}`;
 
   const msg = {
     to: userData.email,
