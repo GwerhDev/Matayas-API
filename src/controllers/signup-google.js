@@ -4,7 +4,7 @@ const passport = require("passport");
 const userSchema = require("../models/User");
 const { signupGoogle } = require("../integrations/google-auth");
 const { createToken } = require("../integrations/jwt");
-const { clientUrl, defaultPassword, defaultUsername, adminEmailList } = require("../config");
+const { clientUrl, defaultPassword, defaultUsername, adminEmails } = require("../config");
 const { status, methods, roles } = require("../misc/consts-user-model");
 
 passport.use('signup-google', signupGoogle);
@@ -37,11 +37,11 @@ router.get('/success', async (req, res) => {
       const tokenData = {
         id: existingUser._id,
         role: existingUser.role,
-        inVerified: existingUser.isVerified,
+        isVerified: existingUser.isVerified,
       };
       const token = await createToken(tokenData, 3);
       return res.status(200).redirect(`${clientUrl}/auth?token=${token}`);
-    };
+    }
 
     const userData = {
       username: user.username ?? defaultUsername,
@@ -56,7 +56,7 @@ router.get('/success', async (req, res) => {
       status: status.active,
     };
 
-    if (adminEmailList.includes(user.email)) userData.role = roles.admin;
+    if (adminEmails.includes(String(user.email).toLowerCase())) userData.role = roles.admin;
 
     const userCreated = new userSchema(userData);
     await userCreated.save();

@@ -1,5 +1,5 @@
 const Instagram = require('passport-instagram').Strategy;
-const { instagramClientId, instagramClientSecret, instagramAccessToken, clientUrl } = require('../config');
+const { instagramClientId, instagramClientSecret, clientUrl } = require('../config');
 const redirectUri = clientUrl + '/admin/post-instagram/callback';
 
 const instagram = new Instagram({
@@ -7,10 +7,9 @@ const instagram = new Instagram({
   clientSecret: instagramClientSecret,
   callbackURL: redirectUri,
 }, function (accessToken, refreshToken, profile, done) {
-  process.nextTick(async function () {
+  process.nextTick(function () {
     try {
-      console.log(profile)
-      return done(null, user);
+      return done(null, profile);
     } catch (error) {
       return done(error);
     }

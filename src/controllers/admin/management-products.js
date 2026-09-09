@@ -47,7 +47,7 @@ router.patch('/update/:id', async (req, res) => {
         await newProductGallery.save();
         req.body.productGallery[i] = newProductGallery._id;
       }
-    };
+    }
 
     await productSchema.findByIdAndUpdate(id, req.body);
 

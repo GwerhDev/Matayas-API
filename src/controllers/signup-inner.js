@@ -3,28 +3,25 @@ const router = express.Router();
 const bcrypt = require("bcrypt");
 const userSchema = require("../models/User");
 const { message } = require("../messages");
-const { adminEmailList } = require("../config");
+const { adminEmails } = require("../config");
 const { status, roles, methods } = require("../misc/consts-user-model");
 const { createToken } = require("../integrations/jwt");
 const { sendEmailVerification } = require("../integrations/sendgrid");
 
 router.post('/', async (req, res) => {
   try {
-    const { username, password, email } = req.body;
-    
+    const { username, password } = req.body;
+    const email = typeof req.body.email === "string" ? req.body.email.trim().toLowerCase() : req.body.email;
+
     if(!username || !password || !email) return res.status(400).send({ error: message.signup.error });
-    
+
     const existingUser = await userSchema.findOne({ email });
-    
-    if(existingUser) {
-      const tokenData = {
-        id: existingUser._id,
-        role: existingUser.role,
-        isVerified: existingUser.isVerified
-      };
-      const token = await createToken(tokenData, 3);
-      return res.status(200).send({token});
-    };
+
+    // Nunca emitir un token para una cuenta existente sin credenciales:
+    // eso permitía tomar cuentas ajenas (incluidas admin) con solo el email.
+    if (existingUser) {
+      return res.status(409).send({ error: message.signup.existinguser });
+    }
     
     const userData = {
       username,
@@ -42,7 +39,7 @@ router.post('/', async (req, res) => {
     const salt = await bcrypt.genSalt();
     userData.password = await bcrypt.hash(password, salt);
 
-    if(adminEmailList.includes(email)) userData.role = roles.admin;
+    if(adminEmails.includes(email)) userData.role = roles.admin;
     
     const userCreated = await userSchema.create(userData);
 
@@ -54,13 +51,13 @@ router.post('/', async (req, res) => {
     
     const token = await createToken(tokenData, 3);
 
-    const response = await sendEmailVerification(userData, token);
+    await sendEmailVerification(userData, token);
 
     return res.status(200).send({ msg: message.signup.success, signed: true, token });
 
   } catch (error) {
     return res.status(400).send({ error: message.signup.error });
-  };
+  }
 });
 
 module.exports = router;

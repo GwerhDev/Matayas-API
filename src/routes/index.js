@@ -11,6 +11,7 @@ const loginGoogle = require('../controllers/login-google');
 const signupGoogle = require('../controllers/signup-google');
 const contactMessage = require('../controllers/contact-message');
 const emailVerification = require('../controllers/email-verification');
+const { authLimiter } = require('../middlewares/rateLimit');
 
 router.use("/auth", auth);
 router.use("/admin", admin);
@@ -18,11 +19,11 @@ router.use("/search", search);
 router.use("/account", account);
 router.use("/gallery", gallery);
 router.use("/products", products);
-router.use("/login-inner", loginInner);
-router.use("/signup-inner", signupInner);
+router.use("/login-inner", authLimiter, loginInner);
+router.use("/signup-inner", authLimiter, signupInner);
 router.use("/login-google", loginGoogle);
 router.use("/signup-google", signupGoogle);
-router.use("/contact-message", contactMessage);
-router.use("/email-verification", emailVerification);
+router.use("/contact-message", authLimiter, contactMessage);
+router.use("/email-verification", authLimiter, emailVerification);
 
 module.exports = router;

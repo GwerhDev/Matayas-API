@@ -6,7 +6,8 @@ const bcrypt = require("bcrypt");
 
 router.post('/', async(req,res) => { 
   try {
-    const { email, password } = req.body;
+    const { password } = req.body;
+    const email = typeof req.body.email === "string" ? req.body.email.trim().toLowerCase() : req.body.email;
     const user = await userSchema.findOne({ email });
     if(!user) return res.status(400).send({ logged: false, message: message.login.failure });
     
@@ -20,7 +21,7 @@ router.post('/', async(req,res) => {
 
     } else {
       return res.status(400).send({ logged: false, message: message.login.error });
-    };
+    }
     
   } catch(error) {
     return res.status(400).send({ logged: false, message: message.login.error });

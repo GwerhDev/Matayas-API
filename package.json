@@ -5,7 +5,8 @@
   "main": "src/index.js",
   "scripts": {
     "start": "node src/index.js",
-    "dev": "nodemon"
+    "dev": "nodemon",
+    "lint": "eslint src"
   },
   "keywords": [],
   "author": "",
@@ -20,6 +21,7 @@
     "cors": "^2.8.5",
     "dotenv": "^16.0.3",
     "express": "^4.18.2",
+    "express-rate-limit": "^7.5.1",
     "express-session": "^1.17.3",
     "form-data": "^4.0.0",
     "google-auth-library": "^9.0.0",
@@ -43,6 +45,7 @@
   },
   "devDependencies": {
     "@flydotio/dockerfile": "^0.4.9",
+    "eslint": "^8.57.1",
     "nodemon": "^2.0.20"
   }
 }

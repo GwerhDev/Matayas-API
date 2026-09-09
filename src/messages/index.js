@@ -55,6 +55,13 @@ module.exports = {
       error: "Error",
       existing: "User already exists",
       notfound: "User not found",
+      unauthorized: "Unauthorized",
+    },
+    passwordRecovery: {
+      requested: "If the email exists, a reset link has been sent",
+      success: "Password updated successfully",
+      invalidToken: "Invalid or expired link",
+      error: "Error recovering password",
     },
     product: {
       error: "Error",
