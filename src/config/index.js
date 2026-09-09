@@ -13,19 +13,28 @@ const parseEmailList = (raw) => {
 };
 
 // Lista blanca de orígenes permitidos para CORS.
-// En producción DEBE definirse CORS_ORIGINS (coma-separado); si no, se cae a
-// los dominios conocidos del sitio. En desarrollo se permite el cliente local.
-const corsOrigins = (process.env.CORS_ORIGINS
-  ? process.env.CORS_ORIGINS.split(",")
-  : [
-      process.env.CLIENT_URL,
-      process.env.CLIENT_URL_PROD,
-      !isProd && "http://localhost:5173",
-      isProd && "https://amplificadoresmatayas.com",
-      isProd && "https://www.amplificadoresmatayas.com",
-    ])
-  .map((o) => o && o.trim())
-  .filter(Boolean);
+// CORS_ORIGINS (coma-separado) SE SUMA a los valores por defecto, no los
+// reemplaza: en desarrollo el cliente local siempre está permitido aunque
+// definas CORS_ORIGINS para preparar el deploy.
+const devOrigins = [
+  "http://localhost:5173",
+  "http://127.0.0.1:5173",
+  "http://localhost:4173",
+];
+const prodOrigins = [
+  "https://amplificadoresmatayas.com",
+  "https://www.amplificadoresmatayas.com",
+];
+
+const corsOrigins = [
+  ...(process.env.CORS_ORIGINS || "").split(","),
+  process.env.CLIENT_URL,
+  process.env.CLIENT_URL_PROD,
+  ...(isProd ? prodOrigins : devOrigins),
+]
+  .map((o) => (o || "").trim().replace(/\/$/, ""))
+  .filter(Boolean)
+  .filter((o, i, arr) => arr.indexOf(o) === i);
 
 module.exports = {
   port: process.env.PORT || 8080,
