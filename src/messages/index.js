@@ -61,6 +61,7 @@ module.exports = {
       requested: "If the email exists, a reset link has been sent",
       success: "Password updated successfully",
       invalidToken: "Invalid or expired link",
+      weakPassword: "Password must be at least 6 characters long",
       error: "Error recovering password",
     },
     product: {

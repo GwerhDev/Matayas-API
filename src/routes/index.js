@@ -11,6 +11,7 @@ const loginGoogle = require('../controllers/login-google');
 const signupGoogle = require('../controllers/signup-google');
 const contactMessage = require('../controllers/contact-message');
 const emailVerification = require('../controllers/email-verification');
+const passwordRecovery = require('../controllers/password-recovery');
 const { authLimiter } = require('../middlewares/rateLimit');
 
 router.use("/auth", auth);
@@ -25,5 +26,6 @@ router.use("/login-google", loginGoogle);
 router.use("/signup-google", signupGoogle);
 router.use("/contact-message", authLimiter, contactMessage);
 router.use("/email-verification", authLimiter, emailVerification);
+router.use("/password-recovery", authLimiter, passwordRecovery);
 
 module.exports = router;

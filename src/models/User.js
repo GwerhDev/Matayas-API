@@ -11,6 +11,8 @@ const userSchema = new mongoose.Schema({
     status: { type: String, required: false },
     googleId: { type: String, required: false },
     googlePic: { type: String, required: false },
+    resetPasswordToken: { type: String, required: false },
+    resetPasswordExpires: { type: Date, required: false },
 }, { timestamps: true });
 
 module.exports = mongoose.model('User', userSchema);
