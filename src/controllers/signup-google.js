@@ -4,7 +4,7 @@ const passport = require("passport");
 const userSchema = require("../models/User");
 const { signupGoogle } = require("../integrations/google-auth");
 const { createToken } = require("../integrations/jwt");
-const { clientUrl, defaultPassword, defaultUsername, adminEmails } = require("../config");
+const { clientUrl, defaultUsername, adminEmails } = require("../config");
 const { status, methods, roles } = require("../misc/consts-user-model");
 
 passport.use('signup-google', signupGoogle);
@@ -45,9 +45,11 @@ router.get('/success', async (req, res) => {
 
     const userData = {
       username: user.username ?? defaultUsername,
-      password: defaultPassword,
+      password: null,
+      hasPassword: false,
       email: user.email,
       profilePic: null,
+      profilePicSource: "google",
       isVerified: true,
       method: methods.google,
       googleId: user.googleId,

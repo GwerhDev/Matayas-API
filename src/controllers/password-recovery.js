@@ -71,6 +71,7 @@ router.post("/reset", async (req, res) => {
 
     const salt = await bcrypt.genSalt();
     user.password = await bcrypt.hash(password, salt);
+    user.hasPassword = true;
     user.resetPasswordToken = undefined;
     user.resetPasswordExpires = undefined;
     user.isVerified = true; // recibir el correo demuestra que el email es suyo

@@ -26,8 +26,10 @@ router.post('/', async (req, res) => {
     const userData = {
       username,
       password,
+      hasPassword: true,
       email,
       profilePic: null,
+      profilePicSource: "none",
       status: status.inactive,
       isVerified: false,
       method: methods.inner,

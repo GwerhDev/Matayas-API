@@ -9,8 +9,10 @@ router.post('/', async(req,res) => {
     const { password } = req.body;
     const email = typeof req.body.email === "string" ? req.body.email.trim().toLowerCase() : req.body.email;
     const user = await userSchema.findOne({ email });
-    if(!user) return res.status(400).send({ logged: false, message: message.login.failure });
-    
+    // Sin contraseña definida (cuenta creada solo con Google): no permite
+    // acceso por clave hasta que el usuario cree una desde su cuenta.
+    if(!user || !user.password) return res.status(400).send({ logged: false, message: message.login.failure });
+
     const passwordMatch = await bcrypt.compare(password, user.password);
     
     if(passwordMatch) {
