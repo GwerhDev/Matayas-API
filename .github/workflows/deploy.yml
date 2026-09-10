@@ -10,23 +10,17 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
-  build-and-deploy:
+  deploy:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-
-      - uses: actions/setup-node@v4
         with:
-          node-version: "22"
-          cache: npm
-
-      - name: Instalar dependencias de producción
-        run: npm ci --omit=dev
+          fetch-depth: 2
 
       - name: Armar bundle de despliegue
         run: |
           mkdir deploy
-          cp -r src package.json package-lock.json node_modules deploy/
+          cp -r src package.json package-lock.json deploy/
           mkdir -p deploy/tmp
           printf 'deploy %s %s\n' "$GITHUB_SHA" "$(date -u +%FT%TZ)" > deploy/tmp/restart.txt
 
@@ -48,9 +42,16 @@ jobs:
           set cmd:fail-exit true
           set mirror:parallel-transfer-count 2
           mirror -R --delete --no-perms ./deploy/src/ /src/
-          mirror -R --delete --no-perms --ignore-time ./deploy/node_modules/ /node_modules/
           put ./deploy/package.json -o /package.json
           put ./deploy/package-lock.json -o /package-lock.json
           put ./deploy/tmp/restart.txt -o /tmp/restart.txt
           bye
           SCRIPT
+
+      - name: Aviso si cambiaron dependencias
+        run: |
+          if git diff --name-only HEAD~1 HEAD 2>/dev/null | grep -qE '^package(-lock)?\.json$'; then
+            echo "::warning title=Dependencias cambiaron::Entra a cPanel -> Setup Node.js App -> Run NPM Install -> Restart"
+          else
+            echo "Dependencias sin cambios: no hace falta tocar cPanel."
+          fi
