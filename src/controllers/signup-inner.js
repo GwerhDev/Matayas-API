@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const bcrypt = require("bcrypt");
+const bcrypt = require("bcryptjs");
 const userSchema = require("../models/User");
 const { message } = require("../messages");
 const { adminEmails } = require("../config");

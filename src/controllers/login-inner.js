@@ -2,7 +2,7 @@ const router = require('express').Router();
 const { createToken } = require('../integrations/jwt');
 const { message } = require('../messages');
 const userSchema = require('../models/User');
-const bcrypt = require("bcrypt");
+const bcrypt = require("bcryptjs");
 
 router.post('/', async(req,res) => { 
   try {

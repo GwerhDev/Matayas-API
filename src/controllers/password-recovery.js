@@ -1,6 +1,6 @@
 const router = require("express").Router();
 const crypto = require("crypto");
-const bcrypt = require("bcrypt");
+const bcrypt = require("bcryptjs");
 const userSchema = require("../models/User");
 const { message } = require("../messages");
 const { passwordResetTokenMinutes, isProd, clientUrl } = require("../config");
