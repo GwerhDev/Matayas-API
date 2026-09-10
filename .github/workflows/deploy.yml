@@ -44,12 +44,11 @@ jobs:
           set ftp:ssl-protect-data true
           set ssl:verify-certificate no
           set net:max-retries 3
-          set net:persist-retries 3
           set net:timeout 30
           set cmd:fail-exit true
           set mirror:parallel-transfer-count 2
           mirror -R --delete --no-perms ./deploy/src/ /src/
-          mirror -R --delete --no-perms --size-only ./deploy/node_modules/ /node_modules/
+          mirror -R --delete --no-perms --ignore-time ./deploy/node_modules/ /node_modules/
           put ./deploy/package.json -o /package.json
           put ./deploy/package-lock.json -o /package-lock.json
           put ./deploy/tmp/restart.txt -o /tmp/restart.txt
