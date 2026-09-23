@@ -1,18 +1,13 @@
 const router = require('express').Router();
-const { decodeToken } = require('../../integrations/jwt');
 const { message } = require('../../messages');
-const { roles } = require('../../misc/consts-user-model');
+const requireAdmin = require('../../middlewares/requireAdmin');
 const productSchema = require('../../models/Product');
 const productGallerySchema = require('../../models/ProductGallery');
 
+router.use(requireAdmin);
+
 router.post('/create', async (req, res) => {
   try {
-    const userToken = req.headers.authorization;
-    if (!userToken) return res.status(403).json({ message: message.admin.permissionDenied });
-
-    const decodedToken = await decodeToken(userToken);
-    if (decodedToken?.data?.role !== roles.admin) return res.status(403).json({ message: message.admin.permissionDenied });
-
     const { productGallery } = req.body;
 
     for (let i = 0; i < productGallery.length; i++) {
@@ -31,12 +26,6 @@ router.post('/create', async (req, res) => {
 
 router.patch('/update/:id', async (req, res) => {
   try {
-    const userToken = req.headers.authorization;
-    if (!userToken) return res.status(403).json({ message: message.admin.permissionDenied });
-
-    const decodedToken = await decodeToken(userToken);
-    if (decodedToken?.data?.role !== roles.admin) return res.status(403).json({ message: message.admin.permissionDenied });
-
     const { id } = req.params;
     const { productGallery } = req.body;
 
@@ -60,12 +49,6 @@ router.patch('/update/:id', async (req, res) => {
 
 router.delete('/delete/:id', async (req, res) => {
   try {
-    const userToken = req.headers.authorization;
-    if (!userToken) return res.status(403).json({ message: message.admin.permissionDenied });
-
-    const decodedToken = await decodeToken(userToken);
-    if (decodedToken?.data?.role !== roles.admin) return res.status(403).json({ message: message.admin.permissionDenied });
-
     const { id } = req.params;
 
     await productSchema.findByIdAndDelete(id);

@@ -1,17 +1,12 @@
 const router = require('express').Router();
-const { decodeToken } = require('../../integrations/jwt');
 const { message } = require('../../messages');
-const { roles } = require('../../misc/consts-user-model');
+const requireAdmin = require('../../middlewares/requireAdmin');
 const gallerySchema = require('../../models/Gallery');
 
-router.post('/create', async(req, res) => {
+router.use(requireAdmin);
+
+router.post('/create', async (req, res) => {
   try {
-    const userToken = req.headers.authorization;
-    if (!userToken) return res.status(403).json({ message: message.admin.permissionDenied });
-
-    const decodedToken = await decodeToken(userToken);
-    if (decodedToken?.data?.role !== roles.admin) return res.status(403).json({ message: message.admin.permissionDenied });
-
     const newGallery = new gallerySchema(req.body);
     await newGallery.save();
     return res.status(201).json({ message: message.admin.createproduct.success, success: true });
@@ -20,16 +15,10 @@ router.post('/create', async(req, res) => {
   }
 });
 
-router.patch('/update/:id', async(req, res) => {
+router.patch('/update/:id', async (req, res) => {
   try {
-    const userToken = req.headers.authorization;
-    if (!userToken) return res.status(403).json({ message: message.admin.permissionDenied });
-    
-    const decodedToken = await decodeToken(userToken);
-    if (decodedToken?.data?.role !== roles.admin) return res.status(403).json({ message: message.admin.permissionDenied });
-    
     const { id } = req.params;
-    
+
     await gallerySchema.findByIdAndUpdate(id, req.body);
 
     return res.status(200).json({ message: message.admin.updateproduct.success, success: true });
@@ -39,14 +28,8 @@ router.patch('/update/:id', async(req, res) => {
   }
 });
 
-router.delete('/delete/:id', async(req, res) => {
+router.delete('/delete/:id', async (req, res) => {
   try {
-    const userToken = req.headers.authorization;
-    if (!userToken) return res.status(403).json({ message: message.admin.permissionDenied });
-
-    const decodedToken = await decodeToken(userToken);
-    if (decodedToken?.data?.role !== roles.admin) return res.status(403).json({ message: message.admin.permissionDenied });
-
     const { id } = req.params;
 
     await gallerySchema.findByIdAndDelete(id);
